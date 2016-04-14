@@ -1,0 +1,15 @@
+{
+  "name": "API-Project",
+  "private": true,
+  "version": "1.0.0",
+  "description": "API Project for CSC 590",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jadestobbe/API-Project.git"
+  },
+  "license": "UNLICENSED",
+  "dependencies": {
+    "connect": "^3.4.0",
+    "serve-static": "^1.10.2"
+  }
+}

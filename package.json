@@ -1,6 +1,6 @@
 {
   "name": "API-Project",
-  "private": true,
+  "private": false,
   "version": "1.0.0",
   "description": "API Project for CSC 590",
   "repository": {

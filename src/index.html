@@ -3,8 +3,35 @@
 <head>
   <meta charset="utf-8"/>
   <title>API Project</title>
+  <link rel="import" href="customelem.html" />
+  <script src="/page/page.js"></script>
 </head>
 <body>
-  <h1>Hello World</h1>
+  <custom-elem></custom-elem>
 </body>
+
+<script>
+      var custom = document.getElementsByTagName('CUSTOM-ELEM')[0];
+      page.base('');
+      page('/:v', base);
+      page();
+
+      function base(ctx){
+        custom.whichView = ctx.params.v;
+        if("view1".localeCompare(custom.whichView) === 0){
+          custom._view1 = true;
+          custom._view2 = false;
+          custom._view3 = false;
+        }else if("view2".localeCompare(custom.whichView) === 0){
+          custom._view1 = false;
+          custom._view2 = true;
+          custom._view3 = false;
+        }else{
+          custom._view1 = false;
+          custom._view2 = false;
+          custom._view3 = true;
+        }
+      }
+
+</script>
 </html>

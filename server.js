@@ -4,6 +4,6 @@ var serveStatic = require('serve-static');
 
 var app = connect();
 app.use(serveStatic('./dist'));
-
+app.use(serveStatic('./node_modules'));
 console.log('Starting webserver on http://localhost:8080/');
 http.createServer(app).listen(8080);

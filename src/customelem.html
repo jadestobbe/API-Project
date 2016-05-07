@@ -36,12 +36,12 @@
         <template is="dom-if" if="[[_summonerFound]]">
           <h1>[[summonerName]]</h1>
           <div>
-            <p>Ranked Stats</p>
+            <p>Ranked Solo 5v5 Stats</p>
             <ul>
-              <li>Rank</li>
-              <li>Total</li>
-              <li>Wins</li>
-              <li>Losses</li>
+              <li>Rank: [[rank]]</li>
+              <li>Total Games Played: [[totalGames]]</li>
+              <li>Wins: [[wins]]</li>
+              <li>Losses: [[losses]]</li>
             </ul>
             <button>click</button>
           </div>
@@ -84,10 +84,9 @@
           type: Number,
           value: 0
         },
-
-        whichView:{
+        rank:{
           type: String,
-          value: "view1"
+          value: ""
         },
         _initFinished: {
           type: Boolean,
@@ -108,7 +107,7 @@
       },
       attached: function () {
         this._initFinished = true;
-        this._view1 = true;
+        //this._view1 = true;
         var searchBar = document.forms["searchBar"];
         var summonerName = searchBar["summonerName"];
         var submitButton = searchBar[1];

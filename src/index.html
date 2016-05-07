@@ -30,7 +30,7 @@
       }
 
       function notFound(){
-        console.log("page not found");
+        //do nothing
       }
       function findSummoner(ctx, next){
         var summonerName = ctx.params.summonerName;
@@ -48,13 +48,23 @@
              custom._summonerFound = true;
            }
            var xhr2 = new XMLHttpRequest();
-           xhr2.open("GET", "https://na.api.pvp.net/api/lol/na/v1.3/stats/by-summoner/"+custom.summonerId+"/summary?season=SEASON2016&api_key="+ key,true);
+           //xhr2.open("GET", "https://na.api.pvp.net/api/lol/na/v1.3/stats/by-summoner/"+custom.summonerId+"/summary?season=SEASON2016&api_key="+ key,true);
+           xhr2.open("GET", "https://na.api.pvp.net/api/lol/na/v2.5/league/by-summoner/"+custom.summonerId+"?api_key="+ key,true);
            xhr2.onload = function(){
              var json2 = JSON.parse(xhr2.responseText);
-             var rankedData = json2["playerStatSummaries"][8];
-             console.log(rankedData);
-             custom.wins = rankedData["wins"];
-             custom.losses = rankedData["losses"];
+             var jsonLength = json2[custom.summonerId].length;
+             var rankedData = json2[custom.summonerId][0];
+             custom.rank = rankedData["tier"];
+             var specificSummonerData;
+             for(var i = 0; i < rankedData["entries"].length; i++){
+               if(rankedData["entries"][i]["playerOrTeamName"] === custom.summonerName){
+                 specificSummonerData = rankedData["entries"][i];
+                 break;
+               }
+             }
+             custom.rank = custom.rank + " " + specificSummonerData["division"];
+             custom.wins = specificSummonerData["wins"];
+             custom.losses = specificSummonerData["losses"];
              custom.totalGames = custom.wins + custom.losses;
            }
            xhr2.send();

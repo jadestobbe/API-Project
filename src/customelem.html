@@ -49,7 +49,7 @@
       </template>
       <template is="dom-if" if="[[_view3]]">
         <h1>Recient Games</h1>
-        <template is="dom-repeat" item="{{recientGames}}">
+        <template is="dom-repeat" items="{{recientGames}}">
           <div>
             <h2>Type: {{item.subType}}</h2>
             <h3>Win/Loss: {{item.stats.win}}</h3>

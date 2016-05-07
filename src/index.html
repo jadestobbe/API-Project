@@ -80,8 +80,8 @@
         xhr.open("GET", "https://na.api.pvp.net/api/lol/na/v1.3/game/by-summoner/"+custom.summonerId+"/recent?api_key="+key, true);
         xhr.onload = function(){
           var json = JSON.parse(xhr.responseText);
-          console.log(json);
           custom.recientGames = json["games"];
+          console.log(custom.recientGames);
         }
         xhr.send();
         custom._view("view3");

@@ -99,11 +99,7 @@
         xhr.onerror = function(e) {
           custom._summonerFound = false;
         };
-        try{xhr.send();}
-        catch(err){
-          console.log("something happened");
-          console.log(err);
-        }
+        xhr.send();
         custom._view("view2");
         next();
       }
@@ -114,7 +110,6 @@
         xhr.onload = function(){
           var json = JSON.parse(xhr.responseText);
           custom.recentGames = json["games"];
-          console.log(custom.recentGames);
         }
         xhr.send();
         custom._view("view3");

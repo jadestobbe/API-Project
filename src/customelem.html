@@ -31,7 +31,7 @@
       </template>
       <template is="dom-if" if="[[_view2]]">
         <template is="dom-if" if="[[!_summonerFound]]">
-          <h1>Sorry we coudln't find anyone with that Summoner Name</h1>
+          <h1>Sorry we couldn't find anyone with that Summoner Name</h1>
         </template>
         <template is="dom-if" if="[[_summonerFound]]">
           <h1>[[summonerName]]</h1>
@@ -43,13 +43,19 @@
               <li>Wins: [[wins]]</li>
               <li>Losses: [[losses]]</li>
             </ul>
-            <button>click</button>
+            <a href="./[[summonerNameLowercase]]/recientGames"><button>View Recient Games</button></a>
           </div>
         </template>
       </template>
       <template is="dom-if" if="[[_view3]]">
-        <button><a href="./view2">back3</a></button>
-        <button><a href="./view1">backfurther3</a></button>
+        <h1>Recient Games</h1>
+        <template is="dom-repeat" item="{{recientGames}}">
+          <div>
+            <h2>Type: {{item.subType}}</h2>
+            <h3>Win/Loss: {{item.stats.win}}</h3>
+          </div>
+        </template>
+        <a href="./[[summonerNameLowercase]]"><button>Back to Summoner Profile</button></a>
       </template>
     </template>
   </template>
@@ -64,9 +70,13 @@
           type: Boolean,
           value: false
         },
+        summonerNameLowercase:{
+          type: String,
+          value: ""
+        },
         summonerName: {
           type: String,
-          value: "jade"
+          value: ""
         },
         summonerId: {
           type: Number,
@@ -88,6 +98,10 @@
           type: String,
           value: ""
         },
+        recientGames:{
+          type: Array,
+          value: []
+        },
         _initFinished: {
           type: Boolean,
           value: false
@@ -107,13 +121,12 @@
       },
       attached: function () {
         this._initFinished = true;
-        //this._view1 = true;
         var searchBar = document.forms["searchBar"];
         var summonerName = searchBar["summonerName"];
         var submitButton = searchBar[1];
         submitButton.addEventListener('click', function(evt){
-        evt.preventDefault();
-        page.show("/"+summonerName.value.toLowerCase());
+          evt.preventDefault();
+          page.show("/"+summonerName.value.toLowerCase());
           }, false);
 
 

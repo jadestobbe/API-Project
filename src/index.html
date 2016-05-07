@@ -20,7 +20,7 @@
       page.base('');
       page('/', startPage);
       page('/:summonerName', findSummoner);
-      page('/:summonerName/showgames', showGames);
+      page('/:summonerName/recientGames', showGames);
       page('*', notFound);
       page({hashbang:true});
       //page();
@@ -34,6 +34,7 @@
       }
       function findSummoner(ctx, next){
         var summonerName = ctx.params.summonerName;
+        custom.summonerNameLowercase = summonerName;
         var xhr = new XMLHttpRequest();
         xhr.open("GET", "https://na.api.pvp.net/api/lol/na/v1.4/summoner/by-name/"+summonerName+"?api_key="+key, true);
         xhr.onload = function(){
@@ -74,23 +75,16 @@
         next();
       }
       function showGames(){
-        custom._view("view3");
-      }
-      function base(ctx){
-        custom.whichView = ctx.params.v;
-        if("view1".localeCompare(custom.whichView) === 0){
-          custom._view1 = true;
-          custom._view2 = false;
-          custom._view3 = false;
-        }else if("view2".localeCompare(custom.whichView) === 0){
-          custom._view1 = false;
-          custom._view2 = true;
-          custom._view3 = false;
-        }else{
-          custom._view1 = false;
-          custom._view2 = false;
-          custom._view3 = true;
+        custom.recientGames = [];
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", "https://na.api.pvp.net/api/lol/na/v1.3/game/by-summoner/"+custom.summonerId+"/recent?api_key="+key, true);
+        xhr.onload = function(){
+          var json = JSON.parse(xhr.responseText);
+          console.log(json);
+          custom.recientGames = json["games"];
         }
+        xhr.send();
+        custom._view("view3");
       }
 
 </script>

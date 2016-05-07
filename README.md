@@ -3,13 +3,14 @@
 ## Build
 
 ```js
+npm install
 npm install page
 npm install --global gulp-cli
 gulp
+npm start
 ```
 ## Use the search bar to search up a summoners profile
-for example my user name in League of Legends is jadestobbe
+for example my user name in League of Legends is jadestobbe, 
 other users include floofy and elusive
 
-# After searching for a Summoner and finding their profile 
-# you can see if they have won or lost their last 10 games
+## After searching for a Summoner and finding their profile you can see if they have won or lost their last 10 games

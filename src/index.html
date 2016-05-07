@@ -6,21 +6,53 @@
   <link rel="import" href="customelem.html" />
   <script src="/page/page.js"></script>
 </head>
+<style>
+  body {
+    background-color:black;
+    background-image:
+    radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 40px),
+    radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 30px),
+    radial-gradient(white, rgba(255,255,255,.1) 2px, transparent 40px),
+    radial-gradient(rgba(255,255,255,.4), rgba(255,255,255,.1) 2px, transparent 30px);
+    background-size: 550px 550px, 350px 350px, 250px 250px, 150px 150px;
+    background-position: 0 0, 40px 60px, 130px 270px, 70px 100px;
+  }
+  header {
+    height:100px;
+    background:#F0F0F0;
+    border:1px solid #CCC;
+    width:100%;
+    margin:0px auto;
+    position: relative;
+}
+  form {
+    position: absolute;
+    top: 50%;
+  }
+  header h1 {
+    text-align: center;
+
+
+
+  }
+</style>
 <body>
-  <form name="searchBar">
-    <input type="text" name="summonerName" placeholder="Summoner Name" >
-    <input type="submit" value="Submit">
-  </form>
+  <header>
+    <form name="searchBar">
+      <input type="text" name="summonerName" placeholder="Summoner Name" >
+      <input type="submit" value="Submit">
+    </form>
+    <h1>League of Legends Game Viewer</h1>
+  </header>
   <custom-elem></custom-elem>
 </body>
-
 <script>
       var key = "0ffcffa0-22a4-438b-a3b6-c4dd6b66d69f";
       var custom = document.getElementsByTagName('CUSTOM-ELEM')[0];
       page.base('');
       page('/', startPage);
       page('/:summonerName', findSummoner);
-      page('/:summonerName/recientGames', showGames);
+      page('/:summonerName/recentGames', showGames);
       page('*', notFound);
       page({hashbang:true});
       //page();
@@ -39,17 +71,11 @@
         xhr.open("GET", "https://na.api.pvp.net/api/lol/na/v1.4/summoner/by-name/"+summonerName+"?api_key="+key, true);
         xhr.onload = function(){
            var json = JSON.parse(xhr.responseText);
-           if(json["status"]){
-             custom._summonerFound = false;
-           }
-           else{
-             var summonerInfo = json[summonerName];
-             custom.summonerId = summonerInfo["id"];
-             custom.summonerName = summonerInfo["name"];
-             custom._summonerFound = true;
-           }
+           var summonerInfo = json[summonerName];
+           custom.summonerId = summonerInfo["id"];
+           custom.summonerName = summonerInfo["name"];
+           custom._summonerFound = true;
            var xhr2 = new XMLHttpRequest();
-           //xhr2.open("GET", "https://na.api.pvp.net/api/lol/na/v1.3/stats/by-summoner/"+custom.summonerId+"/summary?season=SEASON2016&api_key="+ key,true);
            xhr2.open("GET", "https://na.api.pvp.net/api/lol/na/v2.5/league/by-summoner/"+custom.summonerId+"?api_key="+ key,true);
            xhr2.onload = function(){
              var json2 = JSON.parse(xhr2.responseText);
@@ -70,18 +96,25 @@
            }
            xhr2.send();
         };
-        xhr.send();
+        xhr.onerror = function(e) {
+          custom._summonerFound = false;
+        };
+        try{xhr.send();}
+        catch(err){
+          console.log("something happened");
+          console.log(err);
+        }
         custom._view("view2");
         next();
       }
       function showGames(){
-        custom.recientGames = [];
+        custom.recentGames = [];
         var xhr = new XMLHttpRequest();
         xhr.open("GET", "https://na.api.pvp.net/api/lol/na/v1.3/game/by-summoner/"+custom.summonerId+"/recent?api_key="+key, true);
         xhr.onload = function(){
           var json = JSON.parse(xhr.responseText);
-          custom.recientGames = json["games"];
-          console.log(custom.recientGames);
+          custom.recentGames = json["games"];
+          console.log(custom.recentGames);
         }
         xhr.send();
         custom._view("view3");

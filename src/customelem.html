@@ -20,22 +20,100 @@
                 background-color:#207cca;
                 color:#fafafa;
               }
-    .button:hover  {
+      .button:hover  {
                 background-color:#fafafa;
                 color:#207cca;
               }
+      h1 {
+          text-align: center;
+          color:  #ffffff;
+          background: repeating-linear-gradient(
+          -55deg,
+          #222,
+          #222 10px,
+          #444 10px,
+          #444 20px
+        );
+      }
+      div.view2 {
+                color: #ffffff;
+                text-align: center;
+                background: repeating-linear-gradient(
+                -55deg,
+                #222,
+                #222 10px,
+                #444 10px,
+                #444 20px
+                );
+      }
+      button {
+
+      	-moz-box-shadow:inset 0px 1px 0px 0px #cf866c;
+      	-webkit-box-shadow:inset 0px 1px 0px 0px #cf866c;
+      	box-shadow:inset 0px 1px 0px 0px #cf866c;
+      	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #d0451b), color-stop(1, #bc3315));
+      	background:-moz-linear-gradient(top, #d0451b 5%, #bc3315 100%);
+      	background:-webkit-linear-gradient(top, #d0451b 5%, #bc3315 100%);
+      	background:-o-linear-gradient(top, #d0451b 5%, #bc3315 100%);
+      	background:-ms-linear-gradient(top, #d0451b 5%, #bc3315 100%);
+      	background:linear-gradient(to bottom, #d0451b 5%, #bc3315 100%);
+      	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#d0451b', endColorstr='#bc3315',GradientType=0);
+      	background-color:#d0451b;
+      	-moz-border-radius:3px;
+      	-webkit-border-radius:3px;
+      	border-radius:3px;
+      	border:1px solid #942911;
+      	display:inline-block;
+      	cursor:pointer;
+      	color:#ffffff;
+      	font-family:Arial;
+      	font-size:13px;
+      	padding:6px 24px;
+      	text-decoration:none;
+      	text-shadow:0px 1px 0px #854629;
+      }
+        button:hover {
+      	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #bc3315), color-stop(1, #d0451b));
+      	background:-moz-linear-gradient(top, #bc3315 5%, #d0451b 100%);
+      	background:-webkit-linear-gradient(top, #bc3315 5%, #d0451b 100%);
+      	background:-o-linear-gradient(top, #bc3315 5%, #d0451b 100%);
+      	background:-ms-linear-gradient(top, #bc3315 5%, #d0451b 100%);
+      	background:linear-gradient(to bottom, #bc3315 5%, #d0451b 100%);
+      	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#bc3315', endColorstr='#d0451b',GradientType=0);
+      	background-color:#bc3315;
+      }
+      button:active {
+      	position:relative;
+      	top:1px;
+      }
+      ul
+      {
+        color:  #ffffff;
+        list-style-type: none;
+      }
+      div.view3 {
+        color:  #ffffff;
+        text-align: center;
+        background: repeating-linear-gradient(
+        -55deg,
+        #222,
+        #222 10px,
+        #444 10px,
+        #444 20px
+        );
+      }
     </style>
     <template is="dom-if" if="[[_initFinished]]">
       <template is="dom-if" if="[[_view1]]">
-        <h1>Search for a Summoner!</h1>
+        <h1 class="view1">Search for a Summoner!</h1>
       </template>
       <template is="dom-if" if="[[_view2]]">
         <template is="dom-if" if="[[!_summonerFound]]">
           <h1>Sorry we couldn't find anyone with that Summoner Name</h1>
         </template>
         <template is="dom-if" if="[[_summonerFound]]">
-          <h1>[[summonerName]]</h1>
-          <div>
+          <h1 class="view2">[[summonerName]]</h1>
+          <div class="view2">
             <p>Ranked Solo 5v5 Stats</p>
             <ul>
               <li>Rank: [[rank]]</li>
@@ -43,16 +121,16 @@
               <li>Wins: [[wins]]</li>
               <li>Losses: [[losses]]</li>
             </ul>
-            <a href="./[[summonerNameLowercase]]/recientGames"><button>View Recient Games</button></a>
+            <a href="./[[summonerNameLowercase]]/recentGames"><button>View recent Games</button></a>
           </div>
         </template>
       </template>
       <template is="dom-if" if="[[_view3]]">
-        <h1>Recient Games</h1>
-        <template is="dom-repeat" items="{{recientGames}}">
-          <div>
+        <h1>[[summonerName]]: Recent Games</h1>
+        <template is="dom-repeat" items="{{recentGames}}">
+          <div class="view3">
             <h2>Type: {{item.subType}}</h2>
-            <h3>Win/Loss: {{item.stats.win}}</h3>
+            <h3>Won: {{item.stats.win}}</h3>
           </div>
         </template>
         <a href="./[[summonerNameLowercase]]"><button>Back to Summoner Profile</button></a>
@@ -98,7 +176,7 @@
           type: String,
           value: ""
         },
-        recientGames:{
+        recentGames:{
           type: Array,
           value: []
         },

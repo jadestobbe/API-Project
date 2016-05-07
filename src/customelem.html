@@ -3,94 +3,49 @@
 <dom-module id="custom-elem">
   <template>
     <style>
-      :host {
-        display: block;
-      }
-      h1 {
-        font-size: 16px;
-        line-height: 19px;
-        margin: 0;
-      }
-      .meta {
-        margin-bottom: 15px;
-        font-size: 12px;
-        color: #808080;
-      }
-      a {
-        color: currentColor;
-      }
-      .loader {
-        font-size: 10px;
-        margin: 50px auto;
-        text-indent: -9999em;
-        width: 11em;
-        height: 11em;
-        border-radius: 50%;
-        background: #303031;
-        background: -moz-linear-gradient(left, #303031 10%, rgba(255, 255, 255, 0) 42%);
-        background: -webkit-linear-gradient(left, #303031 10%, rgba(255, 255, 255, 0) 42%);
-        background: -o-linear-gradient(left, #303031 10%, rgba(255, 255, 255, 0) 42%);
-        background: -ms-linear-gradient(left, #303031 10%, rgba(255, 255, 255, 0) 42%);
-        background: linear-gradient(to right, #303031 10%, rgba(255, 255, 255, 0) 42%);
-        position: relative;
-        -webkit-animation: load3 1.4s infinite linear;
-        animation: load3 1.4s infinite linear;
-        -webkit-transform: translateZ(0);
-        -ms-transform: translateZ(0);
-        transform: translateZ(0);
-      }
-        .loader:before {
-          width: 50%;
-          height: 50%;
-          background: #ffffff;
-          border-radius: 100% 0 0 0;
-          position: absolute;
-          top: 0;
-          left: 0;
-          content: '';
-        }
-        .loader:after {
-          background: transparent;
-          width: 75%;
-          height: 75%;
-          border-radius: 50%;
-          content: '';
-          margin: auto;
-          position: absolute;
-          top: 0;
-          left: 0;
-          bottom: 0;
-          right: 0;
-        }
-      @-webkit-keyframes load3 {
-        0% {
-          -webkit-transform: rotate(0deg);
-          transform: rotate(0deg);
-        }
-        100% {
-          -webkit-transform: rotate(360deg);
-          transform: rotate(360deg);
-        }
-      }
-      @keyframes load3 {
-        0% {
-          -webkit-transform: rotate(0deg);
-          transform: rotate(0deg);
-        }
-        100% {
-          -webkit-transform: rotate(360deg);
-          transform: rotate(360deg);
-        }
-      }
+      form {
+                width:500px;
+                margin:50px auto;
+            }
+      .search {
+                padding:8px 15px;
+                background:rgba(50, 50, 50, 0.2);
+                border:0px solid #dbdbdb;
+              }
+      .button {
+                position:relative;
+                padding:6px 15px;
+                left:-8px;
+                border:2px solid #207cca;
+                background-color:#207cca;
+                color:#fafafa;
+              }
+    .button:hover  {
+                background-color:#fafafa;
+                color:#207cca;
+              }
     </style>
-    <h1>[[whichView]]</h1>
     <template is="dom-if" if="[[_initFinished]]">
       <template is="dom-if" if="[[_view1]]">
-        <button><a href="./view2">next1</a></button>
+        <h1>Search for a Summoner!</h1>
       </template>
       <template is="dom-if" if="[[_view2]]">
-        <button><a href="./view1">back2</a></button>
-        <button><a href="./view3">next2</a></button>
+        <template is="dom-if" if="[[!_summonerFound]]">
+          <h1>Sorry we coudln't find anyone with that Summoner Name</h1>
+        </template>
+        <template is="dom-if" if="[[_summonerFound]]">
+          <h1>[[summonerName]]</h1>
+          <div>
+            <p>Ranked Stats</p>
+            <ul>
+              <li>Rank</li>
+              <li>Total</li>
+              <li>Wins</li>
+              <li>Losses</li>
+            </ul>
+            <button>click</button>
+          </div>
+        </template>
       </template>
       <template is="dom-if" if="[[_view3]]">
         <button><a href="./view2">back3</a></button>
@@ -105,6 +60,31 @@
       // add properties and methods on the element's prototype
       properties: {
         // declare properties for the element's public API
+        _summonerFound: {
+          type: Boolean,
+          value: false
+        },
+        summonerName: {
+          type: String,
+          value: "jade"
+        },
+        summonerId: {
+          type: Number,
+          value: 0
+        },
+        wins:{
+          type: Number,
+          value: 0
+        },
+        losses:{
+          type: Number,
+          value: 0
+        },
+        totalGames:{
+          type: Number,
+          value: 0
+        },
+
         whichView:{
           type: String,
           value: "view1"
@@ -129,9 +109,32 @@
       attached: function () {
         this._initFinished = true;
         this._view1 = true;
+        var searchBar = document.forms["searchBar"];
+        var summonerName = searchBar["summonerName"];
+        var submitButton = searchBar[1];
+        submitButton.addEventListener('click', function(evt){
+        evt.preventDefault();
+        page.show("/"+summonerName.value.toLowerCase());
+          }, false);
+
+
       },
       _view: function(v){
-        return v == this.whichView;
+        if (v === "view1"){
+          this._view1 = true;
+          this._view2 = false;
+          this._view3 = false;
+        }
+        else if (v === "view2"){
+          this._view1 = false;
+          this._view2 = true;
+          this._view3 = false;
+        }
+        else if (v === "view3"){
+          this._view1 = false;
+          this._view2 = false;
+          this._view3 = true;
+        }
       }
     });
   </script>

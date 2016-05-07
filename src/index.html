@@ -7,15 +7,65 @@
   <script src="/page/page.js"></script>
 </head>
 <body>
+  <form name="searchBar">
+    <input type="text" name="summonerName" placeholder="Summoner Name" >
+    <input type="submit" value="Submit">
+  </form>
   <custom-elem></custom-elem>
 </body>
 
 <script>
+      var key = "0ffcffa0-22a4-438b-a3b6-c4dd6b66d69f";
       var custom = document.getElementsByTagName('CUSTOM-ELEM')[0];
       page.base('');
-      page('/:v', base);
-      page();
+      page('/', startPage);
+      page('/:summonerName', findSummoner);
+      page('/:summonerName/showgames', showGames);
+      page('*', notFound);
+      page({hashbang:true});
+      //page();
+      function startPage(ctx, next){
+        custom._view("view1");
+        next();
+      }
 
+      function notFound(){
+        console.log("page not found");
+      }
+      function findSummoner(ctx, next){
+        var summonerName = ctx.params.summonerName;
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", "https://na.api.pvp.net/api/lol/na/v1.4/summoner/by-name/"+summonerName+"?api_key="+key, true);
+        xhr.onload = function(){
+           var json = JSON.parse(xhr.responseText);
+           if(json["status"]){
+             custom._summonerFound = false;
+           }
+           else{
+             var summonerInfo = json[summonerName];
+             custom.summonerId = summonerInfo["id"];
+             custom.summonerName = summonerInfo["name"];
+             custom._summonerFound = true;
+           }
+           var xhr2 = new XMLHttpRequest();
+           xhr2.open("GET", "https://na.api.pvp.net/api/lol/na/v1.3/stats/by-summoner/"+custom.summonerId+"/summary?season=SEASON2016&api_key="+ key,true);
+           xhr2.onload = function(){
+             var json2 = JSON.parse(xhr2.responseText);
+             var rankedData = json2["playerStatSummaries"][8];
+             console.log(rankedData);
+             custom.wins = rankedData["wins"];
+             custom.losses = rankedData["losses"];
+             custom.totalGames = custom.wins + custom.losses;
+           }
+           xhr2.send();
+        };
+        xhr.send();
+        custom._view("view2");
+        next();
+      }
+      function showGames(){
+        custom._view("view3");
+      }
       function base(ctx){
         custom.whichView = ctx.params.v;
         if("view1".localeCompare(custom.whichView) === 0){

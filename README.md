@@ -1,6 +1,6 @@
 # Riot API Project
 A three page web app which leverages the Riot API to search up information about players.
-This project uses Javascript, HTML, CSS, and Web Components.
+This project uses node.js, Javascript, HTML, CSS, and Web Components.
 The page routing is done using page.js
 ## Build
 

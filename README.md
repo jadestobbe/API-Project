@@ -1,4 +1,6 @@
 # Riot released some major updates to their API back in May, I have not had time to redo everything yet.
+As a result nothing works.
+
 # Riot API Project
 A three page web app which leverages the Riot API to search up information about players.
 This project uses node.js, Javascript, HTML, CSS, and Web Components.
